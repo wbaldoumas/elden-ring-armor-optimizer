@@ -9,6 +9,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ArmorJson = await _http.GetStringAsync("/elden-ring-armor-optimizer/data/armor.json");
+        ArmorJson = await _http.GetStringAsync("/data/armor.json");
     }
 }
