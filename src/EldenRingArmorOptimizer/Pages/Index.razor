@@ -1,14 +1,41 @@
 ﻿@page "/"
-@inject HttpClient _http
+@using EldenRingOptimizer.Engine.Repositories
+@using EldenRingOptimizer.Engine.Records
+@using EldenRingOptimizer.Engine.Enums
+@inject IArmorPieceRepository _repository
 
-@ArmorJson;
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Physical</th>
+        <th scope="col">Magic</th>
+        <th scope="col">Lightning</th>
+        <th scope="col">Fire</th>
+        <th scope="col">Holy</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var armorPiece in _armorPieces)
+    {
+        <tr>
+            <td>@armorPiece.Name</td>
+            <td>@armorPiece.Physical</td>
+            <td>@armorPiece.Magic</td>
+            <td>@armorPiece.Lightning</td>
+            <td>@armorPiece.Fire</td>
+            <td>@armorPiece.Holy</td>
+        </tr>
+    }
+    </tbody>
+</table>
 
 @code
 {
-    public string? ArmorJson = string.Empty;
+    public IEnumerable<ArmorPiece> _armorPieces = new List<ArmorPiece>();
 
     protected override async Task OnInitializedAsync()
     {
-        ArmorJson = await _http.GetStringAsync("/data/armor.json");
+        _armorPieces = await _repository.GetByTypeAsync(ArmorType.Head);
     }
 }

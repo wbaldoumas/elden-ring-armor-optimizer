@@ -6,6 +6,9 @@ insert_final_newline = true
 
 [*.cs]
 
+# the "new" keyword should be followed by a space
+dotnet_diagnostic.SA1000.severity = none
+
 # closing parenthesis should not be preceded by a space
 dotnet_diagnostic.SA1009.severity = none
 
