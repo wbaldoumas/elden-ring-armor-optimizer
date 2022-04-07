@@ -7,7 +7,7 @@ namespace EldenRingOptimizer.Engine.Repositories;
 
 public class ArmorPieceRepository : IArmorPieceRepository
 {
-    private const string ArmorJsonPath = "/data/armor.json";
+    private const string ArmorJsonPath = "/elden-ring-armor-optimizer/data/armor.json";
     private static IList<ArmorPiece>? _armorPieces;
     private readonly HttpClient _httpClient;
     private readonly IMapper<JsonArmorPiece, ArmorPiece> _mapper;
