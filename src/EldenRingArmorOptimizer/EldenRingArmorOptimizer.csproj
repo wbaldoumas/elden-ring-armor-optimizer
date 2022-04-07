@@ -18,10 +18,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="wwwroot\data\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\EldenRingOptimizer.Engine\EldenRingOptimizer.Engine.csproj" />
     </ItemGroup>
 

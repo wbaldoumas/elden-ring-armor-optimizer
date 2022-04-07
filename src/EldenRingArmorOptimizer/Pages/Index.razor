@@ -2,7 +2,9 @@
 @using EldenRingOptimizer.Engine.Repositories
 @using EldenRingOptimizer.Engine.Records
 @using EldenRingOptimizer.Engine.Enums
-@inject IArmorPieceRepository _repository
+@inject IArmorPieceRepository _armorPieceRepository
+@inject ITalismanRepository _talismanRepository
+@inject IWeaponRepository _weaponRepository
 
 <table class="table">
     <thead>
@@ -30,12 +32,64 @@
     </tbody>
 </table>
 
+<hr/>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Equip Load Modifier</th>
+        <th scope="col">Endurance Modifier</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var talisman in _talismans)
+    {
+        <tr>
+            <td>@talisman.Name</td>
+            <td>@talisman.EquipLoadModifier</td>
+            <td>@talisman.EnduranceModifier</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<hr/>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Weight</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var weapon in _weapons)
+    {
+        <tr>
+            <td>@weapon.Name</td>
+            <td>@weapon.Weight</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
 @code
 {
-    public IEnumerable<ArmorPiece> _armorPieces = new List<ArmorPiece>();
+    private IEnumerable<ArmorPiece> _armorPieces = new List<ArmorPiece>();
+    private IEnumerable<Talisman> _talismans = new List<Talisman>();
+    private IEnumerable<Weapon> _weapons = new List<Weapon>();
 
     protected override async Task OnInitializedAsync()
     {
-        _armorPieces = await _repository.GetByTypeAsync(ArmorType.Head);
+        var armorPiecesTask = _armorPieceRepository.GetByTypeAsync(ArmorType.Head);
+        var talismansTask = _talismanRepository.GetAll();
+        var weaponsTask = _weaponRepository.GetAll();
+
+        await Task.WhenAll(armorPiecesTask, talismansTask, weaponsTask);
+
+        _armorPieces = armorPiecesTask.Result;
+        _talismans = talismansTask.Result;
+        _weapons = weaponsTask.Result;
     }
 }

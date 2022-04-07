@@ -5,6 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Repositories\IWeaponRepository.cs~RF1a75b74a.TMP" />
+    </ItemGroup>
+
+    <ItemGroup>
         <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
