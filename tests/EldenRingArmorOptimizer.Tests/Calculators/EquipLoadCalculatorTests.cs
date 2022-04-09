@@ -20,55 +20,67 @@ public class EquipLoadRepositoryTests
 
             yield return new TestCaseData(
                 startingEndurance,
-                zeroTalisman,
-                zeroTalisman,
-                zeroTalisman,
-                zeroTalisman,
+                new TalismanLoadout(
+                    zeroTalisman,
+                    zeroTalisman,
+                    zeroTalisman,
+                    zeroTalisman
+                ),
                 45.0
             );
 
             yield return new TestCaseData(
                 startingEndurance,
-                enduranceTalisman,
-                zeroTalisman,
-                zeroTalisman,
-                zeroTalisman,
+                new TalismanLoadout(
+                    enduranceTalisman,
+                    zeroTalisman,
+                    zeroTalisman,
+                    zeroTalisman
+                ),
                 52.9
             );
 
             yield return new TestCaseData(
                 startingEndurance,
-                enduranceTalisman,
-                enduranceTalisman,
-                enduranceTalisman,
-                enduranceTalisman,
+                new TalismanLoadout(
+                    enduranceTalisman,
+                    enduranceTalisman,
+                    enduranceTalisman,
+                    enduranceTalisman
+                ),
                 75.2
             );
 
             yield return new TestCaseData(
                 startingEndurance,
-                equipLoadTalismanA,
-                zeroTalisman,
-                zeroTalisman,
-                zeroTalisman,
+                new TalismanLoadout(
+                    equipLoadTalismanA,
+                    zeroTalisman,
+                    zeroTalisman,
+                    zeroTalisman
+                ),
                 53.55
             );
 
             yield return new TestCaseData(
                 startingEndurance,
-                equipLoadTalismanA,
-                equipLoadTalismanB,
-                zeroTalisman,
-                zeroTalisman,
+                new TalismanLoadout(
+                    equipLoadTalismanA,
+                    equipLoadTalismanB,
+                    zeroTalisman,
+                    zeroTalisman
+                ),
                 60.3
             );
 
             yield return new TestCaseData(
                 startingEndurance,
-                enduranceTalisman,
-                equipLoadTalismanA,
-                equipLoadTalismanB,
-                zeroTalisman,
+                new TalismanLoadout(
+                    enduranceTalisman,
+                    equipLoadTalismanA,
+                    equipLoadTalismanB,
+                    zeroTalisman
+                ),
                 70.886
             );
         }
@@ -78,17 +90,14 @@ public class EquipLoadRepositoryTests
     [TestCaseSource(nameof(TestCases))]
     public void EquipLoadRepository_calculates_expected_equip_load(
         byte endurance,
-        Talisman talisman1,
-        Talisman talisman2,
-        Talisman talisman3,
-        Talisman talisman4,
+        TalismanLoadout talismanLoadout,
         double expectedEquipLoad)
     {
         // arrange
         var equipLoadCalculator = new EquipLoadCalculator();
 
         // act
-        var equipLoad = equipLoadCalculator.Calculate(endurance, talisman1, talisman2, talisman3, talisman4);
+        var equipLoad = equipLoadCalculator.Calculate(endurance, talismanLoadout);
 
         // assert
         equipLoad.Should().Be(expectedEquipLoad);

@@ -1,4 +1,5 @@
 ﻿using EldenRingArmorOptimizer.Engine.Enums;
+using EldenRingArmorOptimizer.Engine.Records;
 
 namespace EldenRingArmorOptimizer.Engine.Calculators;
 
@@ -11,13 +12,20 @@ public class AvailableEquipLoadCalculator : IAvailableEquipLoadCalculator
         { RollType.Heavy, 1 }
     };
 
-    public double Calculate(double equipLoad, RollType rollType)
+    private readonly IEquipLoadCalculator _equipLoadCalculator;
+
+    public AvailableEquipLoadCalculator(IEquipLoadCalculator equipLoadCalculator) =>
+        _equipLoadCalculator = equipLoadCalculator;
+
+    public double Calculate(PlayerLoadout playerLoadout)
     {
-        if (rollType == RollType.Overloaded)
+        if (playerLoadout.TargetRollType == RollType.Overloaded)
         {
             return double.MaxValue;
         }
 
-        return equipLoad * RollTypePercentages[rollType];
+        var equipLoad = _equipLoadCalculator.Calculate(playerLoadout.Endurance, playerLoadout.TalismanLoadout);
+
+        return (equipLoad * RollTypePercentages[playerLoadout.TargetRollType]) - playerLoadout.Weight;
     }
 }
