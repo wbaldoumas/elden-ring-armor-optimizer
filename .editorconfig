@@ -9,6 +9,9 @@ insert_final_newline = true
 # the "new" keyword should be followed by a space
 dotnet_diagnostic.SA1000.severity = none
 
+# single line comments should start with a space
+dotnet_diagnostic.SA1005.severity = none
+
 # closing parenthesis should not be preceded by a space
 dotnet_diagnostic.SA1009.severity = none
 
@@ -40,6 +43,7 @@ dotnet_diagnostic.SA1516.severity = none
 dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1602.severity = none
 dotnet_diagnostic.CS1591.severity = none
+resharper_c_sharp_warnings_cs1591_highlighting = none
 
 # documentation for properties must begin with the accessor keywords on the property
 dotnet_diagnostic.SA1623.severity = none

@@ -5,7 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <AdditionalFiles Include="..\stylecop.json" Link="stylecop.json" />
+      <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,11 +18,20 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Update="wwwroot\appsettings.Development.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+        <Content Update="wwwroot\appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
         <Folder Include="wwwroot\data\" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EldenRingOptimizer.Engine\EldenRingOptimizer.Engine.csproj" />
+      <ProjectReference Include="..\EldenRingArmorOptimizer.Engine\EldenRingArmorOptimizer.Engine.csproj" />
     </ItemGroup>
 
 </Project>

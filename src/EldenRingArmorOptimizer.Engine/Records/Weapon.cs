@@ -1,4 +1,4 @@
-﻿namespace EldenRingOptimizer.Engine.Records;
+﻿namespace EldenRingArmorOptimizer.Engine.Records;
 
 public record Weapon(
     string Name,

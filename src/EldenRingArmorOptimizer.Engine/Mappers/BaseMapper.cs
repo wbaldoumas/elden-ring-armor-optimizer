@@ -1,4 +1,4 @@
-﻿namespace EldenRingOptimizer.Engine.Mappers;
+﻿namespace EldenRingArmorOptimizer.Engine.Mappers;
 
 public abstract class BaseMapper<TSource, TTarget> : IMapper<TSource, TTarget>
 {
