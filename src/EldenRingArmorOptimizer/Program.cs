@@ -1,4 +1,5 @@
 using EldenRingArmorOptimizer;
+using EldenRingArmorOptimizer.Engine.Calculators;
 using EldenRingArmorOptimizer.Engine.Configuration;
 using EldenRingArmorOptimizer.Engine.DataTransfer;
 using EldenRingArmorOptimizer.Engine.Mappers;
@@ -22,5 +23,7 @@ builder.Services.AddScoped<IMapper<TalismanDto, Talisman>, TalismanMapper>();
 builder.Services.AddScoped<IArmorPieceRepository, ArmorPieceRepository>();
 builder.Services.AddScoped<ITalismanRepository, TalismanRepository>();
 builder.Services.AddScoped<IWeaponRepository, WeaponRepository>();
+builder.Services.AddScoped<IEquipLoadCalculator, EquipLoadCalculator>();
+builder.Services.AddScoped<IAvailableEquipLoadCalculator, AvailableEquipLoadCalculator>();
 
 await builder.Build().RunAsync();
