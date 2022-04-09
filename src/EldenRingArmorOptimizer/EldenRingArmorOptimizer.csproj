@@ -5,12 +5,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+        <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.3" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.3" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.3"
+                          PrivateAssets="all" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -31,7 +32,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\EldenRingArmorOptimizer.Engine\EldenRingArmorOptimizer.Engine.csproj" />
+        <ProjectReference Include="..\EldenRingArmorOptimizer.Engine\EldenRingArmorOptimizer.Engine.csproj" />
     </ItemGroup>
 
 </Project>
