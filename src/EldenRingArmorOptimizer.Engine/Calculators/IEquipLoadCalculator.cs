@@ -16,7 +16,7 @@ public interface IEquipLoadCalculator
     /// <param name="talisman3">The player's third talisman.</param>
     /// <param name="talisman4">The player's fourth talisman.</param>
     /// <returns>The equip load value for the given endurance and talismans.</returns>
-    double Get(
+    double Calculate(
         byte endurance,
         Talisman talisman1,
         Talisman talisman2,

@@ -109,7 +109,7 @@ public class EquipLoadCalculator : IEquipLoadCalculator
         { 99, 160.0 }
     };
 
-    public double Get(
+    public double Calculate(
         byte endurance,
         Talisman talisman1,
         Talisman talisman2,

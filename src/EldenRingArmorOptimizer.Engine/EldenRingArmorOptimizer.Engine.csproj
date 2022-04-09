@@ -5,6 +5,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Calculators\AvailableEquipLoadCalculator.cs~RF2873b1dc.TMP" />
+      <None Remove="Enums\EquipLoadType.cs~RF286ed700.TMP" />
+    </ItemGroup>
+
+    <ItemGroup>
       <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 

@@ -76,7 +76,7 @@ public class EquipLoadRepositoryTests
 
     [Test]
     [TestCaseSource(nameof(TestCases))]
-    public void EquipLoadRepository_generates_expected_equip_load(
+    public void EquipLoadRepository_calculates_expected_equip_load(
         byte endurance,
         Talisman talisman1,
         Talisman talisman2,
@@ -85,10 +85,10 @@ public class EquipLoadRepositoryTests
         double expectedEquipLoad)
     {
         // arrange
-        var equipLoadRepository = new EquipLoadCalculator();
+        var equipLoadCalculator = new EquipLoadCalculator();
 
         // act
-        var equipLoad = equipLoadRepository.Get(endurance, talisman1, talisman2, talisman3, talisman4);
+        var equipLoad = equipLoadCalculator.Calculate(endurance, talisman1, talisman2, talisman3, talisman4);
 
         // assert
         equipLoad.Should().Be(expectedEquipLoad);
