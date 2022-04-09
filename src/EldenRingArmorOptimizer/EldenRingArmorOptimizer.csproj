@@ -5,10 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Remove="wwwroot\appsettings.Development.json~RF282bfdb8.TMP" />
-    </ItemGroup>
-
-    <ItemGroup>
       <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 
