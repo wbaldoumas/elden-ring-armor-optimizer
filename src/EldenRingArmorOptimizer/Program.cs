@@ -25,5 +25,6 @@ builder.Services.AddScoped<ITalismanRepository, TalismanRepository>();
 builder.Services.AddScoped<IWeaponRepository, WeaponRepository>();
 builder.Services.AddScoped<IEquipLoadCalculator, EquipLoadCalculator>();
 builder.Services.AddScoped<IAvailableEquipLoadCalculator, AvailableEquipLoadCalculator>();
+builder.Services.AddScoped<IArmorSetScoreCalculator, ArmorSetScoreCalculator>();
 
 await builder.Build().RunAsync();
