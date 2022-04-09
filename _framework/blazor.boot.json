@@ -10,8 +10,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "EldenRingArmorOptimizer.dll": "sha256-hudlYDz7nW5i\/IqcQi\/i3v+F4yKIhl\/VmOImEJ+R\/\/c=",
-      "EldenRingArmorOptimizer.Engine.dll": "sha256-T90b2Qott4tSuWvhM\/QeMzVnbKEFdByO865VmoRHe+g=",
+      "EldenRingArmorOptimizer.dll": "sha256-IP20FIsTOMRusJWNTUJRT6H7HVeIlUBog+i5CMkI80E=",
+      "EldenRingArmorOptimizer.Engine.dll": "sha256-iIywhqnkfYxMqY6DXAcfQMFV0jdFCfJLtBZ2F37Q88k=",
       "Microsoft.AspNetCore.Components.dll": "sha256-mpIIIDgHkq6LRwd5\/skmau1qgWLbf22CeL0PXCixwcg=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-JrcahE7oAMMG1NZqgJfAQc1mtGDS9xAO6cDBWxDLgoY=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-GKpovxzba7Xgu7PqXY\/ADf4LGLZKhfIWxG+LmPhHzSs=",
