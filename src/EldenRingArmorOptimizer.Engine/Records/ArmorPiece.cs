@@ -1,6 +1,6 @@
-﻿using EldenRingOptimizer.Engine.Enums;
+﻿using EldenRingArmorOptimizer.Engine.Enums;
 
-namespace EldenRingOptimizer.Engine.Records;
+namespace EldenRingArmorOptimizer.Engine.Records;
 
 public record ArmorPiece(
     string Name,

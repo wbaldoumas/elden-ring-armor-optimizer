@@ -1,6 +1,6 @@
-﻿using EldenRingOptimizer.Engine.Records;
+﻿using EldenRingArmorOptimizer.Engine.Records;
 
-namespace EldenRingOptimizer.Engine.Repositories;
+namespace EldenRingArmorOptimizer.Engine.Repositories;
 
 /// <summary>
 ///     A repository of <see cref="Talisman"/>.

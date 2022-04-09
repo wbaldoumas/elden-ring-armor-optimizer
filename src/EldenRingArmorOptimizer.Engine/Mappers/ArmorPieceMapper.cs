@@ -1,11 +1,12 @@
-﻿using EldenRingOptimizer.Engine.Enums;
-using EldenRingOptimizer.Engine.Records;
+﻿using EldenRingArmorOptimizer.Engine.DataTransfer;
+using EldenRingArmorOptimizer.Engine.Enums;
+using EldenRingArmorOptimizer.Engine.Records;
 
-namespace EldenRingOptimizer.Engine.Mappers;
+namespace EldenRingArmorOptimizer.Engine.Mappers;
 
-public class ArmorPieceMapper : BaseMapper<JsonArmorPiece, ArmorPiece>
+public class ArmorPieceMapper : BaseMapper<ArmorPieceDto, ArmorPiece>
 {
-    public override ArmorPiece Map(JsonArmorPiece item) => new(
+    public override ArmorPiece Map(ArmorPieceDto item) => new(
         item.Name ?? string.Empty,
         Enum.Parse<ArmorType>(string.Concat(item.Type[0].ToString().ToUpper(), item.Type.AsSpan(1))),
         item.Weight ?? 0.0,

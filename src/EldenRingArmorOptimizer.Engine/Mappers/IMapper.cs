@@ -1,4 +1,4 @@
-﻿namespace EldenRingOptimizer.Engine.Mappers;
+﻿namespace EldenRingArmorOptimizer.Engine.Mappers;
 
 /// <summary>
 ///     A mapper that can map from <typeparamref name="TSource"/> to <typeparamref name="TTarget"/>.

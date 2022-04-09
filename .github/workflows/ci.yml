@@ -1,0 +1,35 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]    
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore Dependencies
+      run: dotnet restore src
+
+    - name: Build
+      run: dotnet build src --configuration Release --no-restore
+
+    - name: Unit Test
+      run: |
+        cd ./tests/EldenRingArmorOptimizer.Tests/
+        dotnet test --no-restore /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/ /p:CoverletOutputFormat=opencover
+        
+    - name: Publish Code Coverage
+      uses: codecov/codecov-action@v2
+      with:
+        files: /home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/coverage.opencover.xml
+        fail_ci_if_error: true

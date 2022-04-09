@@ -1,7 +1,7 @@
-﻿using EldenRingOptimizer.Engine.Enums;
-using EldenRingOptimizer.Engine.Records;
+﻿using EldenRingArmorOptimizer.Engine.Enums;
+using EldenRingArmorOptimizer.Engine.Records;
 
-namespace EldenRingOptimizer.Engine.Repositories;
+namespace EldenRingArmorOptimizer.Engine.Repositories;
 
 /// <summary>
 ///     A repository of <see cref="ArmorPiece"/>.

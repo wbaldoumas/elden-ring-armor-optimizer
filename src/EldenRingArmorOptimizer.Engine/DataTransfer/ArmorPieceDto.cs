@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EldenRingOptimizer.Engine.Records;
+namespace EldenRingArmorOptimizer.Engine.DataTransfer;
 
-public record JsonArmorPiece(
+public record ArmorPieceDto(
     [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("type")] string Type,
     [property: JsonPropertyName("weight")] double? Weight,

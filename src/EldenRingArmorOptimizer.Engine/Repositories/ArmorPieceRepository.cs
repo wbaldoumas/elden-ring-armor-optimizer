@@ -1,18 +1,19 @@
-﻿using EldenRingOptimizer.Engine.Enums;
-using EldenRingOptimizer.Engine.Mappers;
-using EldenRingOptimizer.Engine.Records;
+﻿using EldenRingArmorOptimizer.Engine.DataTransfer;
+using EldenRingArmorOptimizer.Engine.Enums;
+using EldenRingArmorOptimizer.Engine.Mappers;
+using EldenRingArmorOptimizer.Engine.Records;
 using System.Net.Http.Json;
 
-namespace EldenRingOptimizer.Engine.Repositories;
+namespace EldenRingArmorOptimizer.Engine.Repositories;
 
 public class ArmorPieceRepository : IArmorPieceRepository
 {
-    private const string ArmorJsonPath = "/elden-ring-armor-optimizer/data/armor.json";
+    private const string ArmorPiecesPath = "/data/armor.json";
     private static IList<ArmorPiece>? _armorPieces;
     private readonly HttpClient _httpClient;
-    private readonly IMapper<JsonArmorPiece, ArmorPiece> _mapper;
+    private readonly IMapper<ArmorPieceDto, ArmorPiece> _mapper;
 
-    public ArmorPieceRepository(HttpClient httpClient, IMapper<JsonArmorPiece, ArmorPiece> mapper)
+    public ArmorPieceRepository(HttpClient httpClient, IMapper<ArmorPieceDto, ArmorPiece> mapper)
     {
         _httpClient = httpClient;
         _mapper = mapper;
@@ -29,7 +30,7 @@ public class ArmorPieceRepository : IArmorPieceRepository
     {
         if (_armorPieces is null)
         {
-            var jsonArmorPieces = await _httpClient.GetFromJsonAsync<IEnumerable<JsonArmorPiece>>(ArmorJsonPath);
+            var jsonArmorPieces = await _httpClient.GetFromJsonAsync<IEnumerable<ArmorPieceDto>>(ArmorPiecesPath);
 
             _armorPieces = _mapper.Map(jsonArmorPieces!).ToList();
         }

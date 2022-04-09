@@ -1,4 +1,4 @@
-﻿namespace EldenRingOptimizer.Engine.Enums;
+﻿namespace EldenRingArmorOptimizer.Engine.Enums;
 
 public enum ArmorType
 {
