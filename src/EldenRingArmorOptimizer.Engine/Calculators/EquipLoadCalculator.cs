@@ -109,21 +109,28 @@ public class EquipLoadCalculator : IEquipLoadCalculator
         { 99, 160.0 }
     };
 
-    public double Calculate(
-        byte endurance,
-        Talisman talisman1,
-        Talisman talisman2,
-        Talisman talisman3,
-        Talisman talisman4)
+    public double Calculate(byte endurance, TalismanLoadout talismanLoadout)
     {
         var calculatedEndurance = Math.Min(
-            CalculateModifiedEndurance(endurance, talisman1, talisman2, talisman3, talisman4),
+            CalculateModifiedEndurance(
+                endurance,
+                talismanLoadout.Talisman1,
+                talismanLoadout.Talisman2,
+                talismanLoadout.Talisman3,
+                talismanLoadout.Talisman4
+            ),
             MaxEndurance
         );
 
         var equipLoad = EnduranceEquipLoads[calculatedEndurance];
 
-        return CalculateModifiedEquipLoad(equipLoad, talisman1, talisman2, talisman3, talisman4);
+        return CalculateModifiedEquipLoad(
+            equipLoad,
+            talismanLoadout.Talisman1,
+            talismanLoadout.Talisman2,
+            talismanLoadout.Talisman3,
+            talismanLoadout.Talisman4
+        );
     }
 
     private static byte CalculateModifiedEndurance(

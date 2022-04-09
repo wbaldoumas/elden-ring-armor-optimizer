@@ -8,7 +8,8 @@ public record PlayerLoadout(
     TalismanLoadout TalismanLoadout,
     MinimumStatLoadout MinimumStatLoadout,
     StatPriorityLoadout StatPriorityLoadout,
-    RollType TargetRollType)
+    RollType TargetRollType,
+    int NumberOfResults)
 {
     public double Weight => WeaponLoadout.Weight + TalismanLoadout.Weight;
 }
