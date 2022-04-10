@@ -19,12 +19,15 @@ public class ArmorOptimizerTests
     private static readonly ArmorPiece PhysicalChest = new("Physical Chest", ArmorType.Chest, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece PhysicalLightningChest = new("Physical-Lightning Chest", ArmorType.Chest, 10, 10, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece HeavyChest = new("Heavy Chest", ArmorType.Chest, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
+    private static readonly ArmorPiece ReservedChest = new("Reserved Chest", ArmorType.Chest, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece PhysicalHands = new("Physical Hands", ArmorType.Hands, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece PhysicalLightningHands = new("Physical-Lightning Hands", ArmorType.Hands, 10, 10, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece HeavyHands = new("Heavy Hands", ArmorType.Hands, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
+    private static readonly ArmorPiece ReservedHands = new("Reserved Hands", ArmorType.Hands, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece PhysicalLegs = new("Physical Legs", ArmorType.Legs, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece PhysicalLightningLegs = new("Physical-Lightning Legs", ArmorType.Legs, 10, 10, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0);
     private static readonly ArmorPiece HeavyLegs = new("Heavy Legs", ArmorType.Legs, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
+    private static readonly ArmorPiece ReservedLegs = new("Reserved Legs", ArmorType.Legs, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
 
     private static readonly IDictionary<ArmorType, IEnumerable<ArmorPiece>> ArmorPiecesByType =
         new Dictionary<ArmorType, IEnumerable<ArmorPiece>>
@@ -151,6 +154,23 @@ public class ArmorOptimizerTests
                     new(ReservedHead, PhysicalLightningChest, PhysicalHands, PhysicalLegs)
                 }
             ).SetName("Player loadout prioritizing physical defense with minimum lightning stat and reserved armor.");
+
+            yield return new TestCaseData(
+                new PlayerLoadout(
+                    40,
+                    NoneWeaponLoadout,
+                    NoneTalismanLoadout,
+                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+                    new ReservedArmorLoadout(ReservedHead, ReservedChest, ReservedHands, ReservedLegs),
+                    RollType.Medium,
+                    3
+                ),
+                new List<ArmorSet>
+                {
+                    new(ReservedHead, ReservedChest, ReservedHands, ReservedLegs)
+                }
+            ).SetName("Player loadout with all reserved slots generates fully reserved armor set.");
 
             yield return new TestCaseData(
                 new PlayerLoadout(

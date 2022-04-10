@@ -7,6 +7,7 @@ namespace EldenRingArmorOptimizer.Engine.Services;
 
 public class ArmorOptimizer : IArmorOptimizer
 {
+    private const double DefaultArmorSetScore = -1.0;
     private static readonly NoneArmorSet NoneArmorSet = new();
 
     private readonly IArmorPieceRepository _armorPieceRepository;
@@ -86,7 +87,7 @@ public class ArmorOptimizer : IArmorOptimizer
 
         for (var i = 0; i < numberOfResults; ++i)
         {
-            queue.Enqueue(NoneArmorSet, 0);
+            queue.Enqueue(NoneArmorSet, DefaultArmorSetScore);
         }
 
         return queue;
