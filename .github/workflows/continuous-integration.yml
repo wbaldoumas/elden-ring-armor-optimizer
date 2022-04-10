@@ -29,7 +29,7 @@ jobs:
         dotnet test --no-restore /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/ /p:CoverletOutputFormat=opencover
         
     - name: Publish Code Coverage
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         files: /home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/coverage.opencover.xml
         fail_ci_if_error: true
