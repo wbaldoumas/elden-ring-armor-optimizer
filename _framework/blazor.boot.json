@@ -10,8 +10,8 @@
   "linkerEnabled": true,
   "resources": {
     "assembly": {
-      "EldenRingArmorOptimizer.dll": "sha256-hCi+IQHxuhgQigiINxc1pTPXUUio2ksTupBTiVt0YSA=",
-      "EldenRingArmorOptimizer.Engine.dll": "sha256-JkLCILRpswYDuuNVi63Af0lahmJROJVzdXNHOh2jMGw=",
+      "EldenRingArmorOptimizer.dll": "sha256-\/cL2Cy2GjgV44pD4qgXig9F8jbQfVyXHUw+DYxsYrnc=",
+      "EldenRingArmorOptimizer.Engine.dll": "sha256-pQXnlaZuarRinWxRGu1EQtArjibglEjzb2+ilMaLtt4=",
       "Microsoft.AspNetCore.Components.dll": "sha256-mpIIIDgHkq6LRwd5\/skmau1qgWLbf22CeL0PXCixwcg=",
       "Microsoft.AspNetCore.Components.Web.dll": "sha256-JrcahE7oAMMG1NZqgJfAQc1mtGDS9xAO6cDBWxDLgoY=",
       "Microsoft.AspNetCore.Components.WebAssembly.dll": "sha256-GKpovxzba7Xgu7PqXY\/ADf4LGLZKhfIWxG+LmPhHzSs=",
@@ -28,7 +28,7 @@
       "Microsoft.JSInterop.dll": "sha256-dTO1cE8J5cE6jSxWQMAs0lK2TlGwlvsnv3ilW6gkuz8=",
       "Microsoft.JSInterop.WebAssembly.dll": "sha256-vzwaIvFhA\/CHxhMcXKNUOu7C+zSrSm+hvDEmZhciN54=",
       "System.Collections.Concurrent.dll": "sha256-SK9oIVFMEP2Wc6+FHgaFmHXucT\/A0CGiTePM66r4dMk=",
-      "System.Collections.dll": "sha256-WUL\/2YniCVQ28s8UluwwCFsvgwJJaVrhsoCHG0qrA5k=",
+      "System.Collections.dll": "sha256-vCzb6UfWWNTwCJQ6B4QoTtgEG934jCS0FXS63Xyv1bM=",
       "System.Collections.NonGeneric.dll": "sha256-2qaTXpcMjLfQnB4+YIUFtqWmUJCvqW3fRoWKl8PURYc=",
       "System.Collections.Specialized.dll": "sha256-COYK1JBwAl8XMbu076IYNwmY0XMRfaFr4qe7MtpcPzA=",
       "System.ComponentModel.dll": "sha256-Yt2oJcpvCsQOKO97AQ\/IzcRVhDgp3QbftjrgtCAbE8M=",
@@ -41,13 +41,14 @@
       "System.Net.Http.Json.dll": "sha256-ziJ78LjPnIPbi6CM4aYhVPe3Uz312qZ8kjXNc0vrGSE=",
       "System.Net.Primitives.dll": "sha256-02ljd7265aMwSb5SujIiojY5a2OAZLr\/LGl6uZuPmLk=",
       "System.ObjectModel.dll": "sha256-VSYnXyBB7uUQEK0WdAL696my5QVeoBN67qh9h9MSxBc=",
-      "System.Private.CoreLib.dll": "sha256-oww3w7QYcC6t6B2U4ViJyichb8mcUDs\/pFMkhGgbRQ8=",
+      "System.Private.CoreLib.dll": "sha256-lOpB3mw7T1EM6RmW35EDe2joBo+iddKPGwwANKyAS+Y=",
       "System.Private.Runtime.InteropServices.JavaScript.dll": "sha256-Ok5UDEp9AxQl0bSxbG8d8x6X+mC8NMlbvBrcSQpOigs=",
       "System.Private.Uri.dll": "sha256-pALDX3hdd6ZkYLW4JjIVz34zMevgPMDVvwryf1pe2Ic=",
       "System.Runtime.CompilerServices.Unsafe.dll": "sha256-pboIs9f2VIFXqCFHxgzhAkwhq+Vjkbm4tbx1jlqlCAs=",
-      "System.Runtime.dll": "sha256-X2gWCHjoXmvHwaBSGtlWORR5XzZ8ZRSRMeoV1Qic5IE=",
+      "System.Runtime.dll": "sha256-nu6qklaTZWCbh6nxglVCelosoBfd9oIXuAZrSxORQjk=",
       "System.Text.Encodings.Web.dll": "sha256-2bylgJUiQjpqubbK7zSJaLR20rsotQrg2r0Z9\/Mj7AE=",
-      "System.Text.Json.dll": "sha256-psQjts3UAwUOHJMOV2rESxxKn\/Cr7Z6ds5MZzSx4Z6o="
+      "System.Text.Json.dll": "sha256-psQjts3UAwUOHJMOV2rESxxKn\/Cr7Z6ds5MZzSx4Z6o=",
+      "TaskTupleAwaiter.dll": "sha256-Td6d5m3bIGK\/blPpfhTI87mfX8kOS2jrRksRpRjo92w="
     },
     "extensions": null,
     "lazyAssembly": null,
