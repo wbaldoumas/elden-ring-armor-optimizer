@@ -10,10 +10,10 @@ jobs:
   continuous-integration:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
 
@@ -29,7 +29,7 @@ jobs:
         dotnet test --no-restore /p:CollectCoverage=true /p:CoverletOutput=/home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/ /p:CoverletOutputFormat=opencover
         
     - name: Publish Code Coverage
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         files: /home/runner/work/elden-ring-armor-optimizer/elden-ring-armor-optimizer/coverage.opencover.xml
         fail_ci_if_error: true
