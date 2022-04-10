@@ -8,6 +8,7 @@ public record PlayerLoadout(
     TalismanLoadout TalismanLoadout,
     MinimumStatLoadout MinimumStatLoadout,
     StatPriorityLoadout StatPriorityLoadout,
+    ReservedArmorLoadout ReservedArmorLoadout,
     RollType TargetRollType,
     int NumberOfResults)
 {

@@ -19,6 +19,7 @@ public class AvailableEquipLoadCalculatorTests
         {
             var minimumStatLoadout = new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
             var statPriorityLoadout = new StatPriorityLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            var reservedArmorLoadout = new ReservedArmorLoadout(null, null, null, null);
 
             var nullWeapon = new Weapon("null", 0.0);
             var nullTalisman = new Talisman("null", 0.0, 0.0, 0);
@@ -33,6 +34,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(nullTalisman, nullTalisman, nullTalisman, nullTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Overloaded,
                     10
                 ),
@@ -46,6 +48,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(nullTalisman, nullTalisman, nullTalisman, nullTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Light,
                     10
                 ),
@@ -59,6 +62,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(nullTalisman, nullTalisman, nullTalisman, nullTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Light,
                     10
                 ),
@@ -72,6 +76,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(weightedTalisman, nullTalisman, nullTalisman, nullTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Light,
                     10
                 ),
@@ -85,6 +90,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(weightedTalisman, weightedTalisman, weightedTalisman, weightedTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Medium,
                     10
                 ),
@@ -98,6 +104,7 @@ public class AvailableEquipLoadCalculatorTests
                     new TalismanLoadout(weightedTalisman, weightedTalisman, weightedTalisman, weightedTalisman),
                     minimumStatLoadout,
                     statPriorityLoadout,
+                    reservedArmorLoadout,
                     RollType.Heavy,
                     10
                 ),
