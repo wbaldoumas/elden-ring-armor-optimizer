@@ -4,6 +4,10 @@ Please provide a meaningful description of what this change will do, or is for. 
 
 Note that by _not_ including a description, you are asking reviewers to do extra work to understand the context of this change, which may lead to your PR taking much longer to review, or result in it not being reviewed at all.
 
+## Screenshots (if applicable)
+
+Please provide any screenshots showing visual changes to the project. If your changes also include behavioral changes to the project, an animated gif showing your change in action would be helpful to the reviewer as well.
+
 ## Type of Change
 
 - [ ] Bug Fix
