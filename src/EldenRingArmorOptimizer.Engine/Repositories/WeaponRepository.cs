@@ -8,7 +8,7 @@ namespace EldenRingArmorOptimizer.Engine.Repositories;
 public class WeaponRepository : IWeaponRepository
 {
     private const string WeaponsPath = "/data/weapons.json";
-    private static IList<Weapon>? _weapons;
+    private static IEnumerable<Weapon>? _weapons;
     private readonly HttpClient _httpClient;
     private readonly RepositoryConfiguration _configuration;
 
@@ -20,7 +20,7 @@ public class WeaponRepository : IWeaponRepository
 
     public async Task<IEnumerable<Weapon>> GetAll()
     {
-        _weapons ??= await _httpClient.GetFromJsonAsync<IList<Weapon>>(
+        _weapons ??= await _httpClient.GetFromJsonAsync<IEnumerable<Weapon>>(
             $"{_configuration.BaseAddress}{WeaponsPath}"
         );
 
