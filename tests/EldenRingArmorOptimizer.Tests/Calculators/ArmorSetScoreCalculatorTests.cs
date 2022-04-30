@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Calculators;
 
 [TestFixture]
-public class ArmorSetScoreCalculatorTests
+public sealed class ArmorSetScoreCalculatorTests
 {
     private static IEnumerable<TestCaseData> TestCases
     {

@@ -1,6 +1,6 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.DataTransfer;
 
-public record TalismanDto(
+public sealed record TalismanDto(
     string Name,
     double Weight,
     double? EquipLoadModifier,

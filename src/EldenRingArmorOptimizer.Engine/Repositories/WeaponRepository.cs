@@ -5,7 +5,7 @@ using System.Net.Http.Json;
 
 namespace EldenRingArmorOptimizer.Engine.Repositories;
 
-public class WeaponRepository : IWeaponRepository
+public sealed class WeaponRepository : IWeaponRepository
 {
     private const string WeaponsPath = "/data/weapons.json";
     private static IEnumerable<Weapon>? _weapons;

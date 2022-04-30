@@ -2,7 +2,7 @@
 
 namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record PlayerLoadout(
+public readonly record struct PlayerLoadout(
     byte Endurance,
     WeaponLoadout WeaponLoadout,
     TalismanLoadout TalismanLoadout,

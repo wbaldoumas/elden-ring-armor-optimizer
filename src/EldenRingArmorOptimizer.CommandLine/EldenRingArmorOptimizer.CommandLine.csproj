@@ -2,16 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Calculators\ArmorPieceScoreCalculator.cs~RF793cfcc.TMP" />
-      <None Remove="Calculators\IArmorPieceScoreCalculator.cs~RF7930632.TMP" />
-      <None Remove="Records\WeaponLoadout.cs~RF3ad2912.TMP" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+      <None Remove="data\armor.json" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +16,22 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="TaskTupleAwaiter" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="data\armor.json">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\EldenRingArmorOptimizer.Engine\EldenRingArmorOptimizer.Engine.csproj" />
     </ItemGroup>
 
 </Project>

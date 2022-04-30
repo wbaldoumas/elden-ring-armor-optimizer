@@ -2,7 +2,8 @@
 
 namespace EldenRingArmorOptimizer.Engine.Calculators;
 
-public class EquipLoadCalculator : IEquipLoadCalculator
+/// <inheritdoc cref="IEquipLoadCalculator"/>
+public sealed class EquipLoadCalculator : IEquipLoadCalculator
 {
     private const byte MaxEndurance = 99;
 
@@ -114,10 +115,7 @@ public class EquipLoadCalculator : IEquipLoadCalculator
         var calculatedEndurance = Math.Min(
             CalculateModifiedEndurance(
                 endurance,
-                talismanLoadout.Talisman1,
-                talismanLoadout.Talisman2,
-                talismanLoadout.Talisman3,
-                talismanLoadout.Talisman4
+                talismanLoadout.Talismans
             ),
             MaxEndurance
         );
@@ -126,39 +124,24 @@ public class EquipLoadCalculator : IEquipLoadCalculator
 
         return CalculateModifiedEquipLoad(
             equipLoad,
-            talismanLoadout.Talisman1,
-            talismanLoadout.Talisman2,
-            talismanLoadout.Talisman3,
-            talismanLoadout.Talisman4
+            talismanLoadout.Talismans
         );
     }
 
     private static byte CalculateModifiedEndurance(
         byte endurance,
-        Talisman talisman1,
-        Talisman talisman2,
-        Talisman talisman3,
-        Talisman talisman4)
+        IEnumerable<Talisman> talismans)
     {
-        var totalEnduranceModifier = talisman1.EnduranceModifier +
-                                     talisman2.EnduranceModifier +
-                                     talisman3.EnduranceModifier +
-                                     talisman4.EnduranceModifier;
+        var totalEnduranceModifier = talismans.Sum(talisman => talisman.EnduranceModifier);
 
         return (byte)(endurance + totalEnduranceModifier);
     }
 
     private static double CalculateModifiedEquipLoad(
         double equipLoad,
-        Talisman talisman1,
-        Talisman talisman2,
-        Talisman talisman3,
-        Talisman talisman4)
+        IEnumerable<Talisman> talismans)
     {
-        var totalEquipLoadModifier = talisman1.EquipLoadModifier +
-                                     talisman2.EquipLoadModifier +
-                                     talisman3.EquipLoadModifier +
-                                     talisman4.EquipLoadModifier;
+        var totalEquipLoadModifier = talismans.Sum(talisman => talisman.EquipLoadModifier);
 
         return equipLoad + (equipLoad * totalEquipLoadModifier);
     }

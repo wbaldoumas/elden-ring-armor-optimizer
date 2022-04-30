@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Mappers;
 
 [TestFixture]
-public class ArmorPieceMapperTests
+public sealed class ArmorPieceMapperTests
 {
     private static IEnumerable<TestCaseData> TestCases
     {

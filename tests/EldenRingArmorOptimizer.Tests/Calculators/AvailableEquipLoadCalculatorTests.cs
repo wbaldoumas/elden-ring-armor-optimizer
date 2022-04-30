@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Calculators;
 
 [TestFixture]
-public class AvailableEquipLoadCalculatorTests
+public sealed class AvailableEquipLoadCalculatorTests
 {
     private const double TestEquipLoad = 100.0;
     private IEquipLoadCalculator? _mockEquipLoadCalculator;

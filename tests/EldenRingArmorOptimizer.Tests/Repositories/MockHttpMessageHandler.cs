@@ -4,7 +4,7 @@ using System.Net;
 namespace EldenRingArmorOptimizer.Tests.Repositories;
 
 [ExcludeFromCodeCoverage]
-public class MockHttpMessageHandler : HttpMessageHandler
+public sealed class MockHttpMessageHandler : HttpMessageHandler
 {
     private readonly string _response;
 

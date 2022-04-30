@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Repositories;
 
 [TestFixture]
-public class ArmorPieceRepositoryTests
+public sealed class ArmorPieceRepositoryTests
 {
     [Test]
     public async Task ArmorPieceRepository_returns_expected_armor_pieces()

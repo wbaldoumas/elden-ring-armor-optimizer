@@ -7,7 +7,7 @@ using System.Net.Http.Json;
 
 namespace EldenRingArmorOptimizer.Engine.Repositories;
 
-public class TalismanRepository : ITalismanRepository
+public sealed class TalismanRepository : ITalismanRepository
 {
     private const string TalismansPath = "/data/talismans.json";
     private static IList<Talisman>? _talismans;

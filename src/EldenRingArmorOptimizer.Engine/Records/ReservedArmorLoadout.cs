@@ -1,6 +1,6 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record ReservedArmorLoadout(
+public readonly record struct ReservedArmorLoadout(
     ArmorPiece? HeadArmor,
     ArmorPiece? ChestArmor,
     ArmorPiece? HandArmor,

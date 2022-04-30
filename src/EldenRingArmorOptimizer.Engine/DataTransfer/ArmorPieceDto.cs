@@ -2,7 +2,7 @@
 
 namespace EldenRingArmorOptimizer.Engine.DataTransfer;
 
-public record ArmorPieceDto(
+public sealed record ArmorPieceDto(
     [property: JsonPropertyName("name")] string? Name,
     [property: JsonPropertyName("type")] string Type,
     [property: JsonPropertyName("weight")] double? Weight,
