@@ -5,12 +5,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Calculators\ArmorPieceScoreCalculator.cs~RF793cfcc.TMP" />
-      <None Remove="Calculators\IArmorPieceScoreCalculator.cs~RF7930632.TMP" />
-      <None Remove="Records\WeaponLoadout.cs~RF3ad2912.TMP" />
-    </ItemGroup>
-
-    <ItemGroup>
         <AdditionalFiles Include="..\..\stylecop.json" Link="stylecop.json" />
     </ItemGroup>
 

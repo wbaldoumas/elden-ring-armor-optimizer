@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace EldenRingArmorOptimizer.Engine.Repositories;
 
 /// <inheritdoc cref="IArmorPieceRepository"/>
-public class ArmorPieceFromDiskRepository : IArmorPieceRepository
+public sealed class ArmorPieceFromDiskRepository : IArmorPieceRepository
 {
     private const string ArmorPiecesPath = "/data/armor.json";
     private static IList<ArmorPiece>? _armorPieces;

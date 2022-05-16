@@ -4,7 +4,7 @@ using EldenRingArmorOptimizer.Engine.Records;
 namespace EldenRingArmorOptimizer.Engine.Services;
 
 /// <inheritdoc cref="IArmorOptimizerWorker"/>
-public class ArmorOptimizerWorker : IArmorOptimizerWorker
+public sealed class ArmorOptimizerWorker : IArmorOptimizerWorker
 {
     private const double DefaultArmorSetScore = -1.0;
     private static readonly ArmorSet NoneArmorSet = ArmorSet.None();
