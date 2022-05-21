@@ -2,12 +2,14 @@
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Mappers;
 using EldenRingArmorOptimizer.Engine.Records;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.Json;
 
 namespace EldenRingArmorOptimizer.Engine.Repositories;
 
 /// <inheritdoc cref="IArmorPieceRepository"/>
+[ExcludeFromCodeCoverage]
 public sealed class ArmorPieceFromDiskRepository : IArmorPieceRepository
 {
     private const string ArmorPiecesPath = "/data/armor.json";

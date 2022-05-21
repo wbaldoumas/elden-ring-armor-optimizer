@@ -1,5 +1,8 @@
-﻿namespace EldenRingArmorOptimizer.Engine.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace EldenRingArmorOptimizer.Engine.Configuration;
+
+[ExcludeFromCodeCoverage]
 public sealed class RepositoryConfiguration
 {
     public const string Key = "Repository";

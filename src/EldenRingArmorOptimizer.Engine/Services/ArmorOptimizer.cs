@@ -1,4 +1,5 @@
 ﻿using EldenRingArmorOptimizer.Engine.Calculators;
+using EldenRingArmorOptimizer.Engine.Configuration;
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Records;
 using EldenRingArmorOptimizer.Engine.Repositories;
@@ -8,9 +9,8 @@ namespace EldenRingArmorOptimizer.Engine.Services;
 /// <inheritdoc cref="IArmorOptimizer"/>
 public sealed class ArmorOptimizer : IArmorOptimizer
 {
-    private const int MaxDegreesOfParallelism = 6;
-    private const int ArmorOptimizerWorkerSampleSize = 25;
-
+    private readonly int _maxDegreesOfParallelism;
+    private readonly int _armorOptimizerWorkerSampleSize;
     private readonly IArmorPieceRepository _armorPieceRepository;
     private readonly IAvailableEquipLoadCalculator _availableEquipLoadCalculator;
     private readonly IArmorOptimizerWorker _armorOptimizerWorker;
@@ -18,11 +18,15 @@ public sealed class ArmorOptimizer : IArmorOptimizer
     public ArmorOptimizer(
         IArmorPieceRepository armorPieceRepository,
         IAvailableEquipLoadCalculator availableEquipLoadCalculator,
-        IArmorOptimizerWorker armorOptimizerWorker)
+        IArmorOptimizerWorker armorOptimizerWorker,
+        ArmorOptimizerConfiguration configuration
+        )
     {
         _armorPieceRepository = armorPieceRepository;
         _availableEquipLoadCalculator = availableEquipLoadCalculator;
         _armorOptimizerWorker = armorOptimizerWorker;
+        _maxDegreesOfParallelism = configuration.MaxDegreesOfParallelism;
+        _armorOptimizerWorkerSampleSize = configuration.ArmorOptimizerWorkerSampleSize;
     }
 
     public async Task<IEnumerable<ArmorSet>> Optimize(PlayerLoadout playerLoadout)
@@ -39,16 +43,16 @@ public sealed class ArmorOptimizer : IArmorOptimizer
         var handArmorPiecesOffset = 0;
         var legArmorPiecesOffset = 0;
 
-        var headArmorPiecesSliceSize = GetArmorPiecesSliceSize(headArmorPieces.Count, MaxDegreesOfParallelism);
-        var chestArmorPiecesSliceSize = GetArmorPiecesSliceSize(chestArmorPieces.Count, MaxDegreesOfParallelism);
-        var handArmorPiecesSliceSize = GetArmorPiecesSliceSize(handArmorPieces.Count, MaxDegreesOfParallelism);
-        var legArmorPiecesSliceSize = GetArmorPiecesSliceSize(legArmorPieces.Count, MaxDegreesOfParallelism);
+        var headArmorPiecesSliceSize = GetArmorPiecesSliceSize(headArmorPieces.Count, _maxDegreesOfParallelism);
+        var chestArmorPiecesSliceSize = GetArmorPiecesSliceSize(chestArmorPieces.Count, _maxDegreesOfParallelism);
+        var handArmorPiecesSliceSize = GetArmorPiecesSliceSize(handArmorPieces.Count, _maxDegreesOfParallelism);
+        var legArmorPiecesSliceSize = GetArmorPiecesSliceSize(legArmorPieces.Count, _maxDegreesOfParallelism);
 
         var availableEquipLoad = _availableEquipLoadCalculator.Calculate(playerLoadout);
 
         var optimizerWorkerTasks = new List<Task<IEnumerable<ArmorSet>>>();
 
-        for (var i = 0; i < MaxDegreesOfParallelism; ++i)
+        for (var i = 0; i < _maxDegreesOfParallelism; ++i)
         {
             var headArmorPiecesSlice = GetArmorPiecesSlice(
                 headArmorPieces,
@@ -82,7 +86,7 @@ public sealed class ArmorOptimizer : IArmorOptimizer
                 _armorOptimizerWorker.Optimize(
                     playerLoadout,
                     availableEquipLoad,
-                    ArmorOptimizerWorkerSampleSize,
+                    _armorOptimizerWorkerSampleSize,
                     headArmorPiecesSlice,
                     chestArmorPiecesSlice,
                     handArmorPiecesSlice,

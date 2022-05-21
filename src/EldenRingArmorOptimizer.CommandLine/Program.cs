@@ -1,4 +1,5 @@
 ﻿using EldenRingArmorOptimizer.Engine.Calculators;
+using EldenRingArmorOptimizer.Engine.Configuration;
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Mappers;
 using EldenRingArmorOptimizer.Engine.Records;
@@ -13,7 +14,12 @@ var optimizer = new ArmorOptimizer(
     new AvailableEquipLoadCalculator(
         new EquipLoadCalculator()
     ),
-    new ArmorOptimizerWorker(new ArmorSetScoreCalculator())
+    new ArmorOptimizerWorker(new ArmorSetScoreCalculator()),
+    new ArmorOptimizerConfiguration
+    {
+        MaxDegreesOfParallelism = 6,
+        ArmorOptimizerWorkerSampleSize = 25
+    }
 );
 
 var stopwatch = new Stopwatch();
