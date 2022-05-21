@@ -3,7 +3,8 @@ using EldenRingArmorOptimizer.Engine.Records;
 
 namespace EldenRingArmorOptimizer.Engine.Calculators;
 
-public class AvailableEquipLoadCalculator : IAvailableEquipLoadCalculator
+/// <inheritdoc cref="IAvailableEquipLoadCalculator"/>
+public sealed class AvailableEquipLoadCalculator : IAvailableEquipLoadCalculator
 {
     private static readonly IDictionary<RollType, double> RollTypePercentages = new Dictionary<RollType, double>
     {

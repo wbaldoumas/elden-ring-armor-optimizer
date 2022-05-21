@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Repositories;
 
 [TestFixture]
-public class WeaponRepositoryTests
+public sealed class WeaponRepositoryTests
 {
     [Test]
     public async Task WeaponRepository_returns_expected_weapons()

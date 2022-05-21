@@ -1,34 +1,50 @@
-﻿namespace EldenRingArmorOptimizer.Engine.Records;
+﻿using EldenRingArmorOptimizer.Engine.Enums;
 
-public record ArmorSet(ArmorPiece HeadArmor, ArmorPiece ChestArmor, ArmorPiece HandArmor, ArmorPiece LegArmor)
+namespace EldenRingArmorOptimizer.Engine.Records;
+
+public readonly record struct ArmorSet
 {
-    public double Weight => HeadArmor.Weight + ChestArmor.Weight + HandArmor.Weight + LegArmor.Weight;
+    public ArmorSet(params ArmorPiece[] armorPieces)
+    {
+        ArmorPieces = armorPieces;
+    }
+
+    public IReadOnlyCollection<ArmorPiece> ArmorPieces { get; }
+
+    public double Weight => ArmorPieces.Sum(armorPiece => armorPiece.Weight);
+
+    public double Physical => ArmorPieces.Sum(armorPiece => armorPiece.Physical);
+
+    public double Strike => ArmorPieces.Sum(armorPiece => armorPiece.Strike);
+
+    public double Slash => ArmorPieces.Sum(armorPiece => armorPiece.Slash);
+
+    public double Pierce => ArmorPieces.Sum(armorPiece => armorPiece.Pierce);
 
     public double AveragePhysical => (Physical + Strike + Slash + Pierce) / 4;
 
-    public double Physical => HeadArmor.Physical + ChestArmor.Physical + HandArmor.Physical + LegArmor.Physical;
+    public double Magic => ArmorPieces.Sum(armorPiece => armorPiece.Magic);
 
-    public double Strike => HeadArmor.Strike + ChestArmor.Strike + HandArmor.Strike + LegArmor.Strike;
+    public double Fire => ArmorPieces.Sum(armorPiece => armorPiece.Fire);
 
-    public double Slash => HeadArmor.Slash + ChestArmor.Slash + HandArmor.Slash + LegArmor.Slash;
+    public double Lightning => ArmorPieces.Sum(armorPiece => armorPiece.Lightning);
 
-    public double Pierce => HeadArmor.Pierce + ChestArmor.Pierce + HandArmor.Pierce + LegArmor.Pierce;
+    public double Holy => ArmorPieces.Sum(armorPiece => armorPiece.Holy);
 
-    public double Magic => HeadArmor.Magic + ChestArmor.Magic + HandArmor.Magic + LegArmor.Magic;
+    public double Immunity => ArmorPieces.Sum(armorPiece => armorPiece.Immunity);
 
-    public double Fire => HeadArmor.Fire + ChestArmor.Fire + HandArmor.Fire + LegArmor.Fire;
+    public double Robustness => ArmorPieces.Sum(armorPiece => armorPiece.Robustness);
 
-    public double Lightning => HeadArmor.Lightning + ChestArmor.Lightning + HandArmor.Lightning + LegArmor.Lightning;
+    public double Focus => ArmorPieces.Sum(armorPiece => armorPiece.Focus);
 
-    public double Holy => HeadArmor.Holy + ChestArmor.Holy + HandArmor.Holy + LegArmor.Holy;
+    public double Vitality => ArmorPieces.Sum(armorPiece => armorPiece.Vitality);
 
-    public double Immunity => HeadArmor.Immunity + ChestArmor.Immunity + HandArmor.Immunity + LegArmor.Immunity;
+    public double Poise => ArmorPieces.Sum(armorPiece => armorPiece.Poise);
 
-    public double Robustness => HeadArmor.Robustness + ChestArmor.Robustness + HandArmor.Robustness + LegArmor.Robustness;
-
-    public double Focus => HeadArmor.Focus + ChestArmor.Focus + HandArmor.Focus + LegArmor.Focus;
-
-    public double Vitality => HeadArmor.Vitality + ChestArmor.Vitality + HandArmor.Vitality + LegArmor.Vitality;
-
-    public double Poise => HeadArmor.Poise + ChestArmor.Poise + HandArmor.Poise + LegArmor.Poise;
+    public static ArmorSet None() => new(
+        ArmorPiece.None(ArmorType.Head),
+        ArmorPiece.None(ArmorType.Chest),
+        ArmorPiece.None(ArmorType.Hands),
+        ArmorPiece.None(ArmorType.Legs)
+    );
 }

@@ -1,5 +1,6 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.Mappers;
 
+/// <inheritdoc cref="IMapper{TSource,TTarget}"/>
 public abstract class BaseMapper<TSource, TTarget> : IMapper<TSource, TTarget>
 {
     public abstract TTarget Map(TSource item);

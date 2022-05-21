@@ -1,6 +1,6 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record MinimumStatLoadout(
+public readonly record struct MinimumStatLoadout(
     double MinimumAveragePhysical,
     double MinimumPhysical,
     double MinimumStrike,

@@ -4,7 +4,10 @@ using EldenRingArmorOptimizer.Engine.Records;
 
 namespace EldenRingArmorOptimizer.Engine.Mappers;
 
-public class ArmorPieceMapper : BaseMapper<ArmorPieceDto, ArmorPiece>
+/// <summary>
+///     A mapper that can map from <see cref="ArmorPieceDto"/> to <inheritdoc cref="ArmorPiece"/>.
+/// </summary>
+public sealed class ArmorPieceMapper : BaseMapper<ArmorPieceDto, ArmorPiece>
 {
     public override ArmorPiece Map(ArmorPieceDto item) => new(
         item.Name ?? string.Empty,

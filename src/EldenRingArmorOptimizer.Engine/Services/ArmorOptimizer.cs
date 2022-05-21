@@ -1,122 +1,154 @@
 ﻿using EldenRingArmorOptimizer.Engine.Calculators;
+using EldenRingArmorOptimizer.Engine.Configuration;
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Records;
 using EldenRingArmorOptimizer.Engine.Repositories;
 
 namespace EldenRingArmorOptimizer.Engine.Services;
 
-public class ArmorOptimizer : IArmorOptimizer
+/// <inheritdoc cref="IArmorOptimizer"/>
+public sealed class ArmorOptimizer : IArmorOptimizer
 {
-    private const double DefaultArmorSetScore = -1.0;
-    private static readonly NoneArmorSet NoneArmorSet = new();
-
+    private readonly int _maxDegreesOfParallelism;
+    private readonly int _armorOptimizerWorkerSampleSize;
     private readonly IArmorPieceRepository _armorPieceRepository;
-    private readonly IArmorSetScoreCalculator _armorSetScoreCalculator;
     private readonly IAvailableEquipLoadCalculator _availableEquipLoadCalculator;
+    private readonly IArmorOptimizerWorker _armorOptimizerWorker;
 
     public ArmorOptimizer(
         IArmorPieceRepository armorPieceRepository,
-        IArmorSetScoreCalculator armorSetScoreCalculator,
-        IAvailableEquipLoadCalculator availableEquipLoadCalculator)
+        IAvailableEquipLoadCalculator availableEquipLoadCalculator,
+        IArmorOptimizerWorker armorOptimizerWorker,
+        ArmorOptimizerConfiguration configuration)
     {
         _armorPieceRepository = armorPieceRepository;
-        _armorSetScoreCalculator = armorSetScoreCalculator;
         _availableEquipLoadCalculator = availableEquipLoadCalculator;
+        _armorOptimizerWorker = armorOptimizerWorker;
+        _maxDegreesOfParallelism = configuration.MaxDegreesOfParallelism;
+        _armorOptimizerWorkerSampleSize = configuration.ArmorOptimizerWorkerSampleSize;
     }
 
     public async Task<IEnumerable<ArmorSet>> Optimize(PlayerLoadout playerLoadout)
     {
-        var (headArmors, chestArmors, handArmors, legArmors) = await (
+        var (headArmorPieces, chestArmorPieces, handArmorPieces, legArmorPieces) = await (
             GetArmorPiecesByType(playerLoadout.ReservedArmorLoadout.HeadArmor, ArmorType.Head),
             GetArmorPiecesByType(playerLoadout.ReservedArmorLoadout.ChestArmor, ArmorType.Chest),
             GetArmorPiecesByType(playerLoadout.ReservedArmorLoadout.HandArmor, ArmorType.Hands),
             GetArmorPiecesByType(playerLoadout.ReservedArmorLoadout.LegArmor, ArmorType.Legs)
         );
 
+        var headArmorPiecesOffset = 0;
+        var chestArmorPiecesOffset = 0;
+        var handArmorPiecesOffset = 0;
+        var legArmorPiecesOffset = 0;
+
+        var headArmorPiecesSliceSize = GetArmorPiecesSliceSize(headArmorPieces.Count, _maxDegreesOfParallelism);
+        var chestArmorPiecesSliceSize = GetArmorPiecesSliceSize(chestArmorPieces.Count, _maxDegreesOfParallelism);
+        var handArmorPiecesSliceSize = GetArmorPiecesSliceSize(handArmorPieces.Count, _maxDegreesOfParallelism);
+        var legArmorPiecesSliceSize = GetArmorPiecesSliceSize(legArmorPieces.Count, _maxDegreesOfParallelism);
+
         var availableEquipLoad = _availableEquipLoadCalculator.Calculate(playerLoadout);
-        var armorSetQueue = InitializeArmorSetQueue(playerLoadout.NumberOfResults);
 
-        foreach (var headArmor in headArmors)
+        var optimizerWorkerTasks = new List<Task<IEnumerable<ArmorSet>>>();
+
+        for (var i = 0; i < _maxDegreesOfParallelism; ++i)
         {
-            foreach (var chestArmor in chestArmors)
-            {
-                foreach (var handArmor in handArmors)
-                {
-                    foreach (var legArmor in legArmors)
-                    {
-                        var armorSet = new ArmorSet(headArmor, chestArmor, handArmor, legArmor);
+            var headArmorPiecesSlice = GetArmorPiecesSlice(
+                headArmorPieces,
+                playerLoadout.ReservedArmorLoadout.HeadArmor,
+                headArmorPiecesOffset,
+                headArmorPiecesSliceSize
+            );
 
-                        if (armorSet.Weight > availableEquipLoad)
-                        {
-                            continue;
-                        }
+            var chestArmorPiecesSlice = GetArmorPiecesSlice(
+                chestArmorPieces,
+                playerLoadout.ReservedArmorLoadout.ChestArmor,
+                chestArmorPiecesOffset,
+                chestArmorPiecesSliceSize
+            );
 
-                        if (!DoesArmorMeetMinimumStatRequirements(armorSet, playerLoadout.MinimumStatLoadout))
-                        {
-                            continue;
-                        }
+            var handArmorPiecesSlice = GetArmorPiecesSlice(
+                handArmorPieces,
+                playerLoadout.ReservedArmorLoadout.HandArmor,
+                handArmorPiecesOffset,
+                handArmorPiecesSliceSize
+            );
 
-                        var armorSetScore = _armorSetScoreCalculator.Calculate(armorSet, playerLoadout.StatPriorityLoadout);
+            var legArmorPiecesSlice = GetArmorPiecesSlice(
+                legArmorPieces,
+                playerLoadout.ReservedArmorLoadout.LegArmor,
+                legArmorPiecesOffset,
+                legArmorPiecesSliceSize
+            );
 
-                        armorSetQueue.EnqueueDequeue(armorSet, armorSetScore);
-                    }
-                }
-            }
+            optimizerWorkerTasks.Add(
+                _armorOptimizerWorker.Optimize(
+                    playerLoadout,
+                    availableEquipLoad,
+                    _armorOptimizerWorkerSampleSize,
+                    headArmorPiecesSlice,
+                    chestArmorPiecesSlice,
+                    handArmorPiecesSlice,
+                    legArmorPiecesSlice
+                )
+            );
+
+            headArmorPiecesOffset += headArmorPiecesSliceSize;
+            chestArmorPiecesOffset += chestArmorPiecesSliceSize;
+            handArmorPiecesOffset += handArmorPiecesSliceSize;
+            legArmorPiecesOffset += legArmorPiecesSliceSize;
         }
 
-        var armorSets = new List<ArmorSet>();
+        var initialOptimalArmorSets = (await Task.WhenAll(optimizerWorkerTasks))
+            .SelectMany(armorSet => armorSet)
+            .ToList();
 
-        while (armorSetQueue.Count > 0)
+        var candidateHeadArmorPieces = new HashSet<ArmorPiece>();
+        var candidateChestArmorPieces = new HashSet<ArmorPiece>();
+        var candidateHandArmorPieces = new HashSet<ArmorPiece>();
+        var candidateLegArmorPieces = new HashSet<ArmorPiece>();
+
+        foreach (var armorSet in initialOptimalArmorSets)
         {
-            var armorSet = armorSetQueue.Dequeue();
-
-            if (armorSet != NoneArmorSet)
-            {
-                armorSets.Add(armorSet);
-            }
+            candidateHeadArmorPieces.Add(armorSet.ArmorPieces.First(armorPiece => armorPiece.IsOfArmorType(ArmorType.Head)));
+            candidateChestArmorPieces.Add(armorSet.ArmorPieces.First(armorPiece => armorPiece.IsOfArmorType(ArmorType.Chest)));
+            candidateHandArmorPieces.Add(armorSet.ArmorPieces.First(armorPiece => armorPiece.IsOfArmorType(ArmorType.Hands)));
+            candidateLegArmorPieces.Add(armorSet.ArmorPieces.First(armorPiece => armorPiece.IsOfArmorType(ArmorType.Legs)));
         }
 
-        armorSets.Reverse();
+        var finalArmorSets = await _armorOptimizerWorker.Optimize(
+            playerLoadout,
+            availableEquipLoad,
+            playerLoadout.NumberOfResults,
+            candidateHeadArmorPieces,
+            candidateChestArmorPieces,
+            candidateHandArmorPieces,
+            candidateLegArmorPieces
+        );
 
-        return armorSets;
+        return finalArmorSets;
     }
 
-    private static PriorityQueue<ArmorSet, double> InitializeArmorSetQueue(int numberOfResults)
+    private static int GetArmorPiecesSliceSize(int armorPieceCount, double numberOfBuckets) =>
+        (int)Math.Ceiling(armorPieceCount / numberOfBuckets);
+
+    private static IReadOnlyCollection<ArmorPiece> GetArmorPiecesSlice(
+        IEnumerable<ArmorPiece> armorPieces,
+        ArmorPiece? reservedArmorPiece,
+        int offset,
+        int count
+    ) => reservedArmorPiece is not null
+        ? new List<ArmorPiece> { (ArmorPiece)reservedArmorPiece }
+        : armorPieces.Skip(offset).Take(count).ToList();
+
+    private async Task<IReadOnlyCollection<ArmorPiece>> GetArmorPiecesByType(
+        ArmorPiece? reservedArmorPiece,
+        ArmorType armorType)
     {
-        var queue = new PriorityQueue<ArmorSet, double>();
+        var armorPieces = reservedArmorPiece is not null
+            ? new List<ArmorPiece> { (ArmorPiece)reservedArmorPiece }
+            : await _armorPieceRepository.GetByTypeAsync(armorType);
 
-        for (var i = 0; i < numberOfResults; ++i)
-        {
-            queue.Enqueue(NoneArmorSet, DefaultArmorSetScore);
-        }
-
-        return queue;
-    }
-
-    private static bool DoesArmorMeetMinimumStatRequirements(
-        ArmorSet armorSet,
-        MinimumStatLoadout minimumStatLoadout)
-    {
-        return armorSet.AveragePhysical >= minimumStatLoadout.MinimumAveragePhysical &&
-               armorSet.Physical >= minimumStatLoadout.MinimumPhysical &&
-               armorSet.Strike >= minimumStatLoadout.MinimumStrike &&
-               armorSet.Slash >= minimumStatLoadout.MinimumSlash &&
-               armorSet.Pierce >= minimumStatLoadout.MinimumPierce &&
-               armorSet.Magic >= minimumStatLoadout.MinimumMagic &&
-               armorSet.Fire >= minimumStatLoadout.MinimumFire &&
-               armorSet.Lightning >= minimumStatLoadout.MinimumLightning &&
-               armorSet.Holy >= minimumStatLoadout.MinimumHoly &&
-               armorSet.Immunity >= minimumStatLoadout.MinimumImmunity &&
-               armorSet.Robustness >= minimumStatLoadout.MinimumRobustness &&
-               armorSet.Focus >= minimumStatLoadout.MinimumFocus &&
-               armorSet.Vitality >= minimumStatLoadout.MinimumVitality &&
-               armorSet.Poise >= minimumStatLoadout.MinimumPoise;
-    }
-
-    private async Task<IList<ArmorPiece>> GetArmorPiecesByType(ArmorPiece? reservedArmor, ArmorType armorType)
-    {
-        return reservedArmor is not null
-            ? new List<ArmorPiece> { reservedArmor }
-            : (await _armorPieceRepository.GetByTypeAsync(armorType)).ToList();
+        return armorPieces.ToList();
     }
 }

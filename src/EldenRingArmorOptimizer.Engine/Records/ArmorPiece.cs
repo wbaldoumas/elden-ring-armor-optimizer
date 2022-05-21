@@ -2,7 +2,7 @@
 
 namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record ArmorPiece(
+public readonly record struct ArmorPiece(
     string Name,
     ArmorType Type,
     double Weight,
@@ -18,5 +18,26 @@ public record ArmorPiece(
     double Robustness,
     double Focus,
     double Vitality,
-    double Poise
-);
+    double Poise)
+{
+    public static ArmorPiece None(ArmorType armorType) => new(
+        "None",
+        armorType,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+    );
+
+    public bool IsOfArmorType(ArmorType type) => Type == type;
+}

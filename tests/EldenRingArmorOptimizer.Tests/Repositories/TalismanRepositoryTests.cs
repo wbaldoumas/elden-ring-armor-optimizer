@@ -10,7 +10,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Repositories;
 
 [TestFixture]
-public class TalismanRepositoryTests
+public sealed class TalismanRepositoryTests
 {
     [Test]
     public async Task TalismanRepository_returns_expected_talismans()

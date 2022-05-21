@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace EldenRingArmorOptimizer.Tests.Mappers;
 
 [TestFixture]
-public class ArmorPieceMapperTests
+public sealed class ArmorPieceMapperTests
 {
     private static IEnumerable<TestCaseData> TestCases
     {
@@ -16,25 +16,25 @@ public class ArmorPieceMapperTests
         {
             yield return new TestCaseData(
                 new ArmorPieceDto(
-                    "test",
+                    "Test",
                     "head",
                     1.0,
                     1.0,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
                     1.0
                 ),
                 new ArmorPiece(
-                    "test",
+                    "Test",
                     ArmorType.Head,
                     1.0,
                     1.0,
@@ -51,7 +51,46 @@ public class ArmorPieceMapperTests
                     0.0,
                     1.0
                 )
-            );
+            ).SetName("Non-null values are mapped appropriately.");
+
+            yield return new TestCaseData(
+                new ArmorPieceDto(
+                    null,
+                    "head",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
+                ),
+                new ArmorPiece(
+                    string.Empty,
+                    ArmorType.Head,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                )
+            ).SetName("Null values are mapped appropriately.");
         }
     }
 

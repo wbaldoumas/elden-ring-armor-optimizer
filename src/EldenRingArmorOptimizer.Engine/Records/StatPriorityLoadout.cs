@@ -1,6 +1,6 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record StatPriorityLoadout(
+public readonly record struct StatPriorityLoadout(
     int AveragePhysicalPriority,
     int PhysicalPriority,
     int StrikePriority,

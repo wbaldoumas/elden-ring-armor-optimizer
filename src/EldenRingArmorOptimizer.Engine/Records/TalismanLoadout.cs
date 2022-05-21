@@ -1,6 +1,10 @@
 ﻿namespace EldenRingArmorOptimizer.Engine.Records;
 
-public record TalismanLoadout(Talisman Talisman1, Talisman Talisman2, Talisman Talisman3, Talisman Talisman4)
+public readonly record struct TalismanLoadout(params Talisman[] Talismans)
 {
-    public double Weight => Talisman1.Weight + Talisman2.Weight + Talisman3.Weight + Talisman4.Weight;
+    public double Weight => Talismans.Sum(talisman => talisman.Weight);
+
+    public double EnduranceModifier => Talismans.Sum(talisman => talisman.EnduranceModifier);
+
+    public double EquipLoadModifier => Talismans.Sum(talisman => talisman.EquipLoadModifier);
 }

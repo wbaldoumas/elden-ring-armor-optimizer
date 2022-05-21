@@ -1,29 +1,26 @@
-﻿using EldenRingArmorOptimizer.Engine.Configuration;
-using EldenRingArmorOptimizer.Engine.DataTransfer;
+﻿using EldenRingArmorOptimizer.Engine.DataTransfer;
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Mappers;
 using EldenRingArmorOptimizer.Engine.Records;
-using Microsoft.Extensions.Options;
-using System.Net.Http.Json;
+using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
+using System.Text.Json;
 
 namespace EldenRingArmorOptimizer.Engine.Repositories;
 
-public sealed class ArmorPieceRepository : IArmorPieceRepository
+/// <inheritdoc cref="IArmorPieceRepository"/>
+[ExcludeFromCodeCoverage]
+public sealed class ArmorPieceFromDiskRepository : IArmorPieceRepository
 {
     private const string ArmorPiecesPath = "/data/armor.json";
     private static IList<ArmorPiece>? _armorPieces;
-    private readonly HttpClient _httpClient;
+    private readonly string _armorPiecesPath;
     private readonly IMapper<ArmorPieceDto, ArmorPiece> _mapper;
-    private readonly RepositoryConfiguration _configuration;
 
-    public ArmorPieceRepository(
-        HttpClient httpClient,
-        IMapper<ArmorPieceDto, ArmorPiece> mapper,
-        IOptions<RepositoryConfiguration> configurationOptions)
+    public ArmorPieceFromDiskRepository(IMapper<ArmorPieceDto, ArmorPiece> mapper)
     {
-        _httpClient = httpClient;
         _mapper = mapper;
-        _configuration = configurationOptions.Value;
+        _armorPiecesPath = $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}{ArmorPiecesPath}";
     }
 
     public async Task<IEnumerable<ArmorPiece>> GetByTypeAsync(ArmorType type)
@@ -37,9 +34,8 @@ public sealed class ArmorPieceRepository : IArmorPieceRepository
     {
         if (_armorPieces is null)
         {
-            var jsonArmorPieces = await _httpClient.GetFromJsonAsync<IEnumerable<ArmorPieceDto>>(
-                $"{_configuration.BaseAddress}{ArmorPiecesPath}"
-            );
+            var armorPiecesJson = await File.ReadAllTextAsync(_armorPiecesPath);
+            var jsonArmorPieces = JsonSerializer.Deserialize<IEnumerable<ArmorPieceDto>>(armorPiecesJson);
 
             _armorPieces = _mapper.Map(jsonArmorPieces!).ToList();
         }

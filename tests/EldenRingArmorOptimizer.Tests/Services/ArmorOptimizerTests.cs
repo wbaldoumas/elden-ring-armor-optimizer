@@ -1,4 +1,5 @@
 ﻿using EldenRingArmorOptimizer.Engine.Calculators;
+using EldenRingArmorOptimizer.Engine.Configuration;
 using EldenRingArmorOptimizer.Engine.Enums;
 using EldenRingArmorOptimizer.Engine.Records;
 using EldenRingArmorOptimizer.Engine.Repositories;
@@ -12,212 +13,166 @@ namespace EldenRingArmorOptimizer.Tests.Services;
 [TestFixture]
 public class ArmorOptimizerTests
 {
-    private static readonly ArmorPiece PhysicalHead = new("Physical Head", ArmorType.Head, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalLightningHead = new("Physical-Lightning Head", ArmorType.Head, 10, 10, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece HeavyHead = new("Heavy Head", ArmorType.Head, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece ReservedHead = new("Reserved Head", ArmorType.Head, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalChest = new("Physical Chest", ArmorType.Chest, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalLightningChest = new("Physical-Lightning Chest", ArmorType.Chest, 10, 10, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece HeavyChest = new("Heavy Chest", ArmorType.Chest, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece ReservedChest = new("Reserved Chest", ArmorType.Chest, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalHands = new("Physical Hands", ArmorType.Hands, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalLightningHands = new("Physical-Lightning Hands", ArmorType.Hands, 10, 10, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece HeavyHands = new("Heavy Hands", ArmorType.Hands, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece ReservedHands = new("Reserved Hands", ArmorType.Hands, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalLegs = new("Physical Legs", ArmorType.Legs, 10, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece PhysicalLightningLegs = new("Physical-Lightning Legs", ArmorType.Legs, 10, 10, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece HeavyLegs = new("Heavy Legs", ArmorType.Legs, 100, 200, 0, 0, 0, 0, 0, 200, 0, 0, 0, 0, 0, 0);
-    private static readonly ArmorPiece ReservedLegs = new("Reserved Legs", ArmorType.Legs, 10, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0);
+    private IArmorPieceRepository? _mockArmorPieceRepository;
+    private IAvailableEquipLoadCalculator? _mockAvailableEquipLoadCalculator;
+    private IArmorOptimizerWorker? _mockArmorOptimizerWorker;
 
-    private static readonly IDictionary<ArmorType, IEnumerable<ArmorPiece>> ArmorPiecesByType =
-        new Dictionary<ArmorType, IEnumerable<ArmorPiece>>
-        {
-            {
-                ArmorType.Head,
-                new List<ArmorPiece>
-                {
-                    PhysicalHead,
-                    PhysicalLightningHead,
-                    HeavyHead
-                }
-            },
-            {
-                ArmorType.Chest,
-                new List<ArmorPiece>
-                {
-                    PhysicalChest,
-                    PhysicalLightningChest,
-                    HeavyChest
-                }
-            },
-            {
-                ArmorType.Hands,
-                new List<ArmorPiece>
-                {
-                    PhysicalHands,
-                    PhysicalLightningHands,
-                    HeavyHands
-                }
-            },
-            {
-                ArmorType.Legs,
-                new List<ArmorPiece>
-                {
-                    PhysicalLegs,
-                    PhysicalLightningLegs,
-                    HeavyLegs
-                }
-            }
-        };
-
-    private static readonly NoneWeapon NoneWeapon = new();
-
-    private static readonly WeaponLoadout NoneWeaponLoadout = new(
-        NoneWeapon,
-        NoneWeapon,
-        NoneWeapon,
-        NoneWeapon,
-        NoneWeapon,
-        NoneWeapon
-    );
-
-    private static readonly NoneTalisman NoneTalisman = new();
-
-    private static readonly TalismanLoadout NoneTalismanLoadout = new(
-        NoneTalisman,
-        NoneTalisman,
-        NoneTalisman,
-        NoneTalisman
-    );
-
-    private readonly IArmorPieceRepository _mockArmorPieceRepository = Substitute.For<IArmorPieceRepository>();
-    private readonly IArmorSetScoreCalculator _armorSetScoreCalculator = new ArmorSetScoreCalculator();
-    private readonly IAvailableEquipLoadCalculator _mockAvailableEquipLoadCalculator = Substitute.For<IAvailableEquipLoadCalculator>();
-
-    private static IEnumerable<TestCaseData> TestCases
+    [SetUp]
+    public void SetUp()
     {
-        get
-        {
-            yield return new TestCaseData(
-                new PlayerLoadout(
-                    40,
-                    NoneWeaponLoadout,
-                    NoneTalismanLoadout,
-                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new ReservedArmorLoadout(null, null, null, null),
-                    RollType.Medium,
-                    3
-                ),
-                new List<ArmorSet>
-                {
-                    new(PhysicalHead, PhysicalChest, PhysicalLightningHands, PhysicalLegs),
-                    new(PhysicalHead, PhysicalChest, PhysicalHands, PhysicalLightningLegs),
-                    new(PhysicalHead, PhysicalChest, PhysicalHands, PhysicalLegs)
-                }
-            ).SetName("Player loadout prioritizing physical defense with no minimum stat requirements or reserved armor.");
-
-            yield return new TestCaseData(
-                new PlayerLoadout(
-                    40,
-                    NoneWeaponLoadout,
-                    NoneTalismanLoadout,
-                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 30, 0, 0, 0, 0, 0, 0),
-                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new ReservedArmorLoadout(null, null, null, null),
-                    RollType.Medium,
-                    3
-                ),
-                new List<ArmorSet>
-                {
-                    new(PhysicalHead, PhysicalLightningChest, PhysicalLightningHands, PhysicalLightningLegs),
-                    new(PhysicalLightningHead, PhysicalLightningChest, PhysicalHands, PhysicalLegs),
-                    new(PhysicalHead, PhysicalLightningChest, PhysicalHands, PhysicalLightningLegs)
-                }
-            ).SetName("Player loadout prioritizing physical defense with minimum lightning stat and no reserved armor.");
-
-            yield return new TestCaseData(
-                new PlayerLoadout(
-                    40,
-                    NoneWeaponLoadout,
-                    NoneTalismanLoadout,
-                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0),
-                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new ReservedArmorLoadout(ReservedHead, null, null, null),
-                    RollType.Medium,
-                    3
-                ),
-                new List<ArmorSet>
-                {
-                    new(ReservedHead, PhysicalLightningChest, PhysicalHands, PhysicalLightningLegs),
-                    new(ReservedHead, PhysicalChest, PhysicalLightningHands, PhysicalLightningLegs),
-                    new(ReservedHead, PhysicalLightningChest, PhysicalHands, PhysicalLegs)
-                }
-            ).SetName("Player loadout prioritizing physical defense with minimum lightning stat and reserved armor.");
-
-            yield return new TestCaseData(
-                new PlayerLoadout(
-                    40,
-                    NoneWeaponLoadout,
-                    NoneTalismanLoadout,
-                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new ReservedArmorLoadout(ReservedHead, ReservedChest, ReservedHands, ReservedLegs),
-                    RollType.Medium,
-                    3
-                ),
-                new List<ArmorSet>
-                {
-                    new(ReservedHead, ReservedChest, ReservedHands, ReservedLegs)
-                }
-            ).SetName("Player loadout with all reserved slots generates fully reserved armor set.");
-
-            yield return new TestCaseData(
-                new PlayerLoadout(
-                    40,
-                    NoneWeaponLoadout,
-                    NoneTalismanLoadout,
-                    new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 500, 0, 0),
-                    new StatPriorityLoadout(0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
-                    new ReservedArmorLoadout(null, null, null, null),
-                    RollType.Medium,
-                    3
-                ),
-                new List<ArmorSet>()
-            ).SetName("Player loadout prioritizing physical defense with minimum focus stat generates empty list.");
-        }
+        _mockArmorPieceRepository = Substitute.For<IArmorPieceRepository>();
+        _mockAvailableEquipLoadCalculator = Substitute.For<IAvailableEquipLoadCalculator>();
+        _mockArmorOptimizerWorker = Substitute.For<IArmorOptimizerWorker>();
     }
 
     [Test]
-    [TestCaseSource(nameof(TestCases))]
-    public async Task ArmorOptimizer_generates_expected_armor_sets(
-        PlayerLoadout playerLoadout,
-        IEnumerable<ArmorSet> expectedArmorSets)
+    public async Task When_optimizer_is_invoked_expected_components_are_invoked()
     {
         // arrange
-        foreach (var (armorType, armorPieces) in ArmorPiecesByType)
+        var configuration = new ArmorOptimizerConfiguration
         {
-            _mockArmorPieceRepository
-                .GetByTypeAsync(armorType)
-                .Returns(armorPieces);
-        }
+            MaxDegreesOfParallelism = 3,
+            ArmorOptimizerWorkerSampleSize = 10
+        };
 
-        const double availableEquipLoad = 50.0;
+        var playerLoadout = new PlayerLoadout(
+            40,
+            new WeaponLoadout(Array.Empty<Weapon>()),
+            new TalismanLoadout(Array.Empty<Talisman>()),
+            new MinimumStatLoadout(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            new StatPriorityLoadout(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+            new ReservedArmorLoadout(null, null, null, null),
+            RollType.Medium,
+            20
+        );
 
-        _mockAvailableEquipLoadCalculator
+        var mockHeadArmorPieces = GenerateArmorPieces(ArmorType.Head, 10);
+        var mockChestArmorPieces = GenerateArmorPieces(ArmorType.Chest, 10);
+        var mockHandArmorPieces = GenerateArmorPieces(ArmorType.Hands, 10);
+        var mockLegArmorPieces = GenerateArmorPieces(ArmorType.Legs, 10);
+
+        var armorSets = (
+            from mockHeadArmorPiece in mockHeadArmorPieces
+            from mockChestArmorPiece in mockChestArmorPieces
+            from mockHandArmorPiece in mockHandArmorPieces
+            from mockLegArmorPiece in mockLegArmorPieces
+            select new ArmorSet(mockHeadArmorPiece, mockChestArmorPiece, mockHandArmorPiece, mockLegArmorPiece)
+        ).ToList();
+
+        const double availableEquipLoad = 100.00;
+
+        _mockAvailableEquipLoadCalculator!
             .Calculate(playerLoadout)
             .Returns(availableEquipLoad);
 
+        _mockArmorPieceRepository!
+            .GetByTypeAsync(ArmorType.Head)
+            .Returns(mockHeadArmorPieces);
+
+        _mockArmorPieceRepository
+            .GetByTypeAsync(ArmorType.Chest)
+            .Returns(mockChestArmorPieces);
+
+        _mockArmorPieceRepository
+            .GetByTypeAsync(ArmorType.Hands)
+            .Returns(mockHandArmorPieces);
+
+        _mockArmorPieceRepository
+            .GetByTypeAsync(ArmorType.Legs)
+            .Returns(mockLegArmorPieces);
+
+        _mockArmorOptimizerWorker!
+            .Optimize(
+                playerLoadout,
+                availableEquipLoad,
+                configuration.ArmorOptimizerWorkerSampleSize,
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>()
+            ).Returns(
+                armorSets.OrderBy(_ => Guid.NewGuid()).Take(configuration.ArmorOptimizerWorkerSampleSize).ToList(),
+                armorSets.OrderBy(_ => Guid.NewGuid()).Take(configuration.ArmorOptimizerWorkerSampleSize).ToList(),
+                armorSets.OrderBy(_ => Guid.NewGuid()).Take(configuration.ArmorOptimizerWorkerSampleSize).ToList()
+            );
+
+        var expectedArmorSets = armorSets.OrderBy(_ => Guid.NewGuid()).Take(playerLoadout.NumberOfResults).ToList();
+
+        _mockArmorOptimizerWorker
+            .Optimize(
+                playerLoadout,
+                availableEquipLoad,
+                playerLoadout.NumberOfResults,
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>()
+            ).Returns(expectedArmorSets);
+
         var optimizer = new ArmorOptimizer(
             _mockArmorPieceRepository,
-            _armorSetScoreCalculator,
-            _mockAvailableEquipLoadCalculator
+            _mockAvailableEquipLoadCalculator,
+            _mockArmorOptimizerWorker,
+            configuration
         );
 
         // act
-        var armorSets = (await optimizer.Optimize(playerLoadout)).ToList();
+        var results = await optimizer.Optimize(playerLoadout);
 
         // assert
-        armorSets.Should().BeEquivalentTo(expectedArmorSets);
+        results.Should().BeEquivalentTo(expectedArmorSets);
+
+        _mockAvailableEquipLoadCalculator
+            .Received(1)
+            .Calculate(playerLoadout);
+
+        await _mockArmorPieceRepository
+            .Received(1)
+            .GetByTypeAsync(ArmorType.Head);
+
+        await _mockArmorPieceRepository
+            .Received(1)
+            .GetByTypeAsync(ArmorType.Chest);
+
+        await _mockArmorPieceRepository
+            .Received(1)
+            .GetByTypeAsync(ArmorType.Hands);
+
+        await _mockArmorPieceRepository
+            .Received(1)
+            .GetByTypeAsync(ArmorType.Legs);
+
+        await _mockArmorOptimizerWorker
+            .Received(configuration.MaxDegreesOfParallelism)
+            .Optimize(
+                playerLoadout,
+                availableEquipLoad,
+                configuration.ArmorOptimizerWorkerSampleSize,
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>()
+            );
+
+        await _mockArmorOptimizerWorker
+            .Received(1)
+            .Optimize(
+                playerLoadout,
+                availableEquipLoad,
+                playerLoadout.NumberOfResults,
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>(),
+                Arg.Any<IReadOnlyCollection<ArmorPiece>>()
+            );
     }
+
+    private static IList<ArmorPiece> GenerateArmorPieces(ArmorType type, int count) =>
+        Enumerable
+            .Range(1, count)
+            .Select(i =>
+                new ArmorPiece($"Armor Piece {i}", type, i, i, i, i, i, i, i, i, i, i, i, i, i, i)
+            )
+            .OrderBy(_ => Guid.NewGuid())
+            .ToList();
 }
