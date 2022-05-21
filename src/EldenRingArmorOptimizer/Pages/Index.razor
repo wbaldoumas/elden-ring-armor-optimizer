@@ -2,9 +2,9 @@
 @using EldenRingArmorOptimizer.Engine.Repositories
 @using EldenRingArmorOptimizer.Engine.Records
 @using EldenRingArmorOptimizer.Engine.Enums
-@inject IArmorPieceRepository _armorPieceRepository
-@inject ITalismanRepository _talismanRepository
-@inject IWeaponRepository _weaponRepository
+@inject IArmorPieceRepository ArmorPieceRepository
+@inject ITalismanRepository TalismanRepository
+@inject IWeaponRepository WeaponRepository
 
 <table class="table">
     <thead>
@@ -82,9 +82,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var armorPiecesTask = _armorPieceRepository.GetByTypeAsync(ArmorType.Head);
-        var talismansTask = _talismanRepository.GetAll();
-        var weaponsTask = _weaponRepository.GetAll();
+        var armorPiecesTask = ArmorPieceRepository.GetByTypeAsync(ArmorType.Head);
+        var talismansTask = TalismanRepository.GetAll();
+        var weaponsTask = WeaponRepository.GetAll();
 
         await Task.WhenAll(armorPiecesTask, talismansTask, weaponsTask);
 

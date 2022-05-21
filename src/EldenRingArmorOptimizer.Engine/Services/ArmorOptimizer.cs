@@ -19,8 +19,7 @@ public sealed class ArmorOptimizer : IArmorOptimizer
         IArmorPieceRepository armorPieceRepository,
         IAvailableEquipLoadCalculator availableEquipLoadCalculator,
         IArmorOptimizerWorker armorOptimizerWorker,
-        ArmorOptimizerConfiguration configuration
-        )
+        ArmorOptimizerConfiguration configuration)
     {
         _armorPieceRepository = armorPieceRepository;
         _availableEquipLoadCalculator = availableEquipLoadCalculator;
